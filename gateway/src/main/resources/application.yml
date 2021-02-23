@@ -1,0 +1,79 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: cookie_route
+
+---
+# After 路由断言工厂配置
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: after_route #路由ID
+          uri: https://blog.csdn.net #目标服务地址
+          #  路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）。
+          predicates:
+            #- After=2017-01-20T17:42:47.789-07:00[America/Denver]
+            -Path=/csdn
+  profiles: after_route
+---
+
+# Header 路由断言工厂配置
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: header_route #路由ID
+          uri: http://httpbin.org:80
+          predicates:
+            - Header=X-Request-Id, \d+ # Request-Id Header的键，/d+ 匹配一个或多个任意数字Header的值
+  profiles: header_route
+---
+
+# Query通过请求参数配置
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: gateway-service
+          uri: https://www.baidu.com
+          order: 0
+          predicates:
+            - Query=smile
+  profiles: query_route
+
+---
+
+# 和注册中心相结合的路由配置方式
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: seckill-provider-route #路由ID
+          uri: lb://seckill-provider
+          predicates:
+              - path = /seckill-provider/**
+        - id: message-provider-route
+          uri: lb://message-provider
+          predicates:
+                - path = /message-provider/**
+  profiles: provider_route
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+---
+# 通过cookie 匹配配置 sessionId=test
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: cookie-route #路由ID
+          uri: http://httpbin.org:80
+          order: 0
+          predicates:
+            - Cookie=sessionId, test
+  profiles: cookie_route

@@ -2,10 +2,10 @@ server:
   port: 8761
 eureka:
   instance:
-    prefer-ip-address: false #�ύip��Ϣ
+    #prefer-ip-address: false #以IP地址注册到服务中心，相互注册使用IP地址
     hostname: eureka
   client:
-    register-with-eureka: false #��ֹ��eurekaע���Լ�
+    register-with-eureka: false #��ֹ��eurekaע���Լ�
     fetch-registry: false
     service-url:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka

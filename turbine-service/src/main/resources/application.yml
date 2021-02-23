@@ -1,0 +1,23 @@
+server:
+  port: 8768
+spring:
+  application:
+    name: turbine
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+turbine:
+  combine-host-port: true
+  app-config: feign-client,ribbon-client,hystrix
+  cluster-name-expression: new string("default")
+  aggregator:
+    cluster-config: default
+#  instanceUrlSuffix: /hystrix.stream
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

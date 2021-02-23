@@ -1,8 +1,11 @@
 package com.could.ribbonclient.service;
 
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 
 /**
  * @author : zhengmingyue
@@ -15,7 +18,7 @@ public class RibbonService {
     RestTemplate restTemplate;
 
 
-    public String getTest(String name) {
-        return restTemplate.getForObject("http://client/hi?name=" + name, String.class);
+    public String getTest() {
+        return restTemplate.getForObject("http://client/hi", String.class);
     }
 }
